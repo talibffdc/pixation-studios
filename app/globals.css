@@ -1,0 +1,19 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@theme inline {
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-playfair);
+}
+
+:root { color-scheme: light; --background: #ffffff; --foreground: #0a0a0a; --border: #e5e5e5; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: #fff; color: #0a0a0a; font-family: var(--font-inter), Arial, sans-serif; }
+.font-serif, h1, h2, h3, blockquote { font-family: var(--font-playfair), Georgia, serif; }
+.eyebrow { font-size: 10px; letter-spacing: .25em; text-transform: uppercase; color: rgb(10 10 10 / .45); }
+.section-title { font-family: var(--font-playfair), Georgia, serif; font-size: clamp(3rem, 6vw, 6rem); line-height: .9; letter-spacing: -.055em; }
+.section-title em { font-weight: 400; }
+::selection { background: #0a0a0a; color: #fff; }
+input, textarea, button { font: inherit; }
