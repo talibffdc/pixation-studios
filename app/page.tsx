@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { ArrowUpRight, ChevronDown, Menu, Plus, X } from 'lucide-react'
 import { PortfolioSection } from '@/components/portfolio-section'
 
@@ -33,6 +33,26 @@ const faqs = [
 export default function Page() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [openFaq, setOpenFaq] = useState<number | null>(null)
+
+  const handleContactSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    const formData = new FormData(event.currentTarget)
+    const fields = [
+      ['Name', formData.get('name')],
+      ['Studio', formData.get('studio-name')],
+      ['Email', formData.get('email')],
+      ['Project type', formData.get('project-type')],
+      ['Message', formData.get('message')],
+    ] as const
+    const message = fields
+      .map(([label, value]) => [label, String(value ?? '').trim()] as const)
+      .filter(([, value]) => value.length > 0)
+      .map(([label, value]) => `${label}: ${value}`)
+      .join('\n')
+
+    window.open(`https://wa.me/919270017271?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer')
+  }
 
   return (
     <main className="bg-white text-[#0a0a0a]">
@@ -79,7 +99,7 @@ export default function Page() {
 
       <section className="bg-[#0a0a0a] px-5 py-28 text-white md:px-10 md:py-44"><div className="mx-auto max-w-[1440px]"><p className="eyebrow text-white/40">10 / Let&apos;s work together</p><h2 className="mt-10 max-w-6xl font-serif text-[clamp(3.5rem,8vw,8rem)] leading-[0.86] tracking-[-0.06em]">You focus on designing spaces. <em>We&apos;ll help you tell their stories.</em></h2><a href="#contact" className="mt-12 inline-flex items-center gap-4 border-b border-white pb-3 text-xs uppercase tracking-[0.2em]">Start a conversation <ArrowUpRight size={16} /></a></div></section>
 
-      <section id="contact" className="px-5 py-24 md:px-10 md:py-36"><div className="mx-auto grid max-w-[1440px] gap-16 md:grid-cols-[1fr_1.2fr]"><div><p className="eyebrow">11 / Contact</p><h2 className="section-title mt-10">Let&apos;s make<br /><em>something seen.</em></h2><div className="mt-12 flex flex-col gap-4 text-sm"><a className="underline underline-offset-4" href="tel:9270017271">9270017271</a><a className="underline underline-offset-4" href="https://wa.me/919270017271">WhatsApp</a><a className="underline underline-offset-4" href="#">Instagram ↗</a></div></div><form className="flex flex-col gap-8" onSubmit={(e) => e.preventDefault()}>{['Name', 'Studio Name', 'Email', 'Project Type'].map((label) => <label key={label} className="border-b border-black/25 pb-3 text-xs uppercase tracking-[0.12em]">{label}<input required={label !== 'Project Type'} className="mt-4 block w-full bg-transparent text-base normal-case tracking-normal outline-none placeholder:text-black/30" placeholder={`Your ${label.toLowerCase()}`} /></label>)}<label className="border-b border-black/25 pb-3 text-xs uppercase tracking-[0.12em]">Message<textarea className="mt-4 block min-h-24 w-full resize-none bg-transparent text-base normal-case tracking-normal outline-none" placeholder="Tell us about your project" /></label><button className="self-start bg-black px-8 py-4 text-[10px] uppercase tracking-[0.18em] text-white">Send enquiry</button></form></div></section>
+      <section id="contact" className="px-5 py-24 md:px-10 md:py-36"><div className="mx-auto grid max-w-[1440px] gap-16 md:grid-cols-[1fr_1.2fr]"><div><p className="eyebrow">11 / Contact</p><h2 className="section-title mt-10">Let&apos;s make<br /><em>something seen.</em></h2><div className="mt-12 flex flex-col gap-4 text-sm"><a className="underline underline-offset-4" href="tel:9270017271">9270017271</a><a className="underline underline-offset-4" href="https://wa.me/919270017271">WhatsApp</a><a className="underline underline-offset-4" href="#">Instagram ↗</a></div></div><form className="flex flex-col gap-8" onSubmit={handleContactSubmit}>{['Name', 'Studio Name', 'Email', 'Project Type'].map((label) => <label key={label} className="border-b border-black/25 pb-3 text-xs uppercase tracking-[0.12em]">{label}<input name={label.toLowerCase().replace(/ /g, '-')} required={label !== 'Project Type'} className="mt-4 block w-full bg-transparent text-base normal-case tracking-normal outline-none placeholder:text-black/30" placeholder={`Your ${label.toLowerCase()}`} /></label>)}<label className="border-b border-black/25 pb-3 text-xs uppercase tracking-[0.12em]">Message<textarea name="message" className="mt-4 block min-h-24 w-full resize-none bg-transparent text-base normal-case tracking-normal outline-none" placeholder="Tell us about your project" /></label><button className="self-start bg-black px-8 py-4 text-[10px] uppercase tracking-[0.18em] text-white">Send via WhatsApp</button></form></div></section>
 
       <footer className="border-t border-black/10 px-5 py-8 md:px-10"><div className="mx-auto flex max-w-[1440px] flex-col justify-between gap-5 text-xs md:flex-row md:items-center"><span className="font-serif text-2xl tracking-[-0.04em]">Pixation.</span><span className="text-black/50">Working with designers globally</span><span className="text-black/50">© {new Date().getFullYear()} Pixation</span></div></footer>
       <a href="https://wa.me/919270017271" className="fixed bottom-5 right-5 z-30 flex size-12 items-center justify-center rounded-full bg-black text-[10px] uppercase tracking-widest text-white shadow-xl">WA</a><a href="tel:9270017271" className="fixed bottom-5 left-5 z-30 bg-white px-4 py-3 text-[10px] uppercase tracking-widest shadow-xl md:hidden">Call</a>
