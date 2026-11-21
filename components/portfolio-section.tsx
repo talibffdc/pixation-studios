@@ -142,8 +142,18 @@ export function PortfolioSection() {
                 key={name}
                 type="button"
                 onClick={() => openCategory(name)}
-                onMouseEnter={() => cover?.isVideo && setHoveredVideo(cover.file)}
-                onMouseLeave={() => cover?.isVideo && setHoveredVideo(null)}
+                onMouseEnter={(event) => {
+                  if (cover?.isVideo && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+                    setHoveredVideo(cover.file)
+                    void event.currentTarget.querySelector('video')?.play().catch(() => {})
+                  }
+                }}
+                onMouseLeave={(event) => {
+                  if (cover?.isVideo) {
+                    setHoveredVideo(null)
+                    event.currentTarget.querySelector('video')?.pause()
+                  }
+                }}
                 className={`group flex h-full flex-col border border-black/15 bg-[#f5f3ef] p-4 text-left transition-colors hover:bg-[#ebe7e0] md:p-5 ${centerFinalCard && index === portfolioCategories.length - 1 ? 'lg:col-start-2 xl:col-start-auto' : ''}`}
                 aria-label={`Open ${name}, ${items.length} ${countLabel}`}
               >
@@ -151,7 +161,7 @@ export function PortfolioSection() {
                   {cover?.isVideo ? (
                     <>
                       {firstPhoto && <img src={firstPhoto.src} alt="" width={firstPhoto.width} height={firstPhoto.height} loading="lazy" className="absolute inset-0 size-full object-cover" />}
-                      <video src={cover.src} poster={firstPhoto?.src} preload="metadata" muted playsInline autoPlay={hoveredVideo === cover.file} className={`absolute inset-0 size-full object-cover transition-opacity ${hoveredVideo === cover.file ? 'opacity-100' : 'opacity-0'}`} />
+                      <video src={cover.src} poster={firstPhoto?.src} preload="metadata" muted playsInline className={`absolute inset-0 size-full object-cover transition-opacity ${hoveredVideo === cover.file ? 'opacity-100' : 'opacity-0'}`} />
                       <span className="absolute right-4 top-4 flex size-9 items-center justify-center rounded-full bg-white/90 text-black" aria-hidden="true"><Play size={13} fill="currentColor" /></span>
                     </>
                   ) : cover ? (
@@ -186,8 +196,18 @@ export function PortfolioSection() {
                   type="button"
                   key={item.file}
                   onClick={() => openLightbox(index)}
-                  onMouseEnter={() => item.isVideo && setHoveredVideo(item.file)}
-                  onMouseLeave={() => item.isVideo && setHoveredVideo(null)}
+                  onMouseEnter={(event) => {
+                    if (item.isVideo && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+                      setHoveredVideo(item.file)
+                      void event.currentTarget.querySelector('video')?.play().catch(() => {})
+                    }
+                  }}
+                  onMouseLeave={(event) => {
+                    if (item.isVideo) {
+                      setHoveredVideo(null)
+                      event.currentTarget.querySelector('video')?.pause()
+                    }
+                  }}
                   className="group relative mb-4 block w-full break-inside-avoid overflow-hidden text-left md:mb-5"
                   aria-label={item.isVideo ? `Play ${item.title}` : `View ${item.title}`}
                 >
@@ -201,7 +221,6 @@ export function PortfolioSection() {
                         muted
                         loop
                         playsInline
-                        autoPlay={hoveredVideo === item.file}
                         className={`absolute inset-0 size-full aspect-[9/16] object-cover transition-opacity ${hoveredVideo === item.file ? 'opacity-100' : 'opacity-0'}`}
                       />
                       {hoveredVideo !== item.file && <span className="absolute inset-0 flex items-center justify-center bg-black/10"><span className="flex size-11 items-center justify-center rounded-full bg-white/90 text-black"><Play size={15} fill="currentColor" aria-hidden="true" /></span></span>}
