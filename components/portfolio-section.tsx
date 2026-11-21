@@ -9,6 +9,8 @@ type PortfolioFile = {
   file: string
   width: number
   height: number
+  src?: string
+  title?: string
 }
 
 const portfolioFiles: PortfolioFile[] = [
@@ -27,6 +29,12 @@ const portfolioFiles: PortfolioFile[] = [
   { file: 'bedroom 2.jpg', width: 4672, height: 7008 },
   { file: 'bedroom 3.jpg', width: 4672, height: 7008 },
   { file: '1-xpYfpAsEUhlUANDaMuJ9EjL53uyWzR.mp4', width: 0, height: 0 },
+  { file: '1 (2).mp4', width: 0, height: 0, src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/1%20%282%29-UobcTORtlWoTUnaDr7YqNxOTzbS5hw.mp4', title: 'Video 1 (alternate)' },
+  { file: '2.mp4', width: 0, height: 0, src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/2-mnSXymEbT39UMaMRUmCuzeCSamxKPW.mp4', title: 'Video 2' },
+  { file: '3 (1).mp4', width: 0, height: 0, src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/3%20%281%29-kxu53SfCNktXFSlCo3mFpJ8bCkcRzI.mp4', title: 'Video 3 (alternate)' },
+  { file: '3.mp4', width: 0, height: 0, src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/3-p0grpoLbewsQIcDutcTOm8XE11Mj0n.mp4', title: 'Video 3' },
+  { file: '4 (1).mp4', width: 0, height: 0, src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/4%20%281%29-SMRfbY7ZvOTmFc7uQNiQqKalJuMXEB.mp4', title: 'Video 4 (alternate)' },
+  { file: 'BFF16322-61F5-4754-BF8A-6BB608E00088.mp4', width: 0, height: 0, src: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/BFF16322-61F5-4754-BF8A-6BB608E00088-3iv75u8hpHiUyTRrKiRXHeh7fNqWEU.mp4', title: 'Studio video' },
 ]
 
 function categoryForFile(file: string): MediaCategory {
@@ -53,8 +61,8 @@ const portfolio = portfolioFiles.map((item) => {
     ...item,
     category,
     isVideo,
-    src: `/portfolio/${categorySlug(category)}/${encodeURIComponent(item.file)}`,
-    title: isVideo ? `Video ${fileNumber(item.file) || 1}` : item.file.replace(/\.[^.]+$/, ''),
+    src: item.src ?? `/portfolio/${categorySlug(category)}/${encodeURIComponent(item.file)}`,
+    title: item.title ?? (isVideo ? `Video ${fileNumber(item.file) || 1}` : item.file.replace(/\.[^.]+$/, '')),
   }
 })
 
@@ -161,7 +169,7 @@ export function PortfolioSection() {
                   {cover?.isVideo ? (
                     <>
                       {firstPhoto && <img src={firstPhoto.src} alt="" width={firstPhoto.width} height={firstPhoto.height} loading="lazy" className="absolute inset-0 size-full object-cover" />}
-                      <video src={cover.src} poster={firstPhoto?.src} preload="metadata" muted playsInline className={`absolute inset-0 size-full object-cover transition-opacity ${hoveredVideo === cover.file ? 'opacity-100' : 'opacity-0'}`} />
+                      <video src={cover.src} poster={firstPhoto?.src} preload="none" muted playsInline className={`absolute inset-0 size-full object-cover transition-opacity ${hoveredVideo === cover.file ? 'opacity-100' : 'opacity-0'}`} />
                       <span className="absolute right-4 top-4 flex size-9 items-center justify-center rounded-full bg-white/90 text-black" aria-hidden="true"><Play size={13} fill="currentColor" /></span>
                     </>
                   ) : cover ? (
@@ -217,7 +225,7 @@ export function PortfolioSection() {
                       <video
                         src={item.src}
                         poster={firstPhoto?.src}
-                        preload="metadata"
+                        preload="none"
                         muted
                         loop
                         playsInline
@@ -245,7 +253,7 @@ export function PortfolioSection() {
           {adjacentIndexes && <button type="button" aria-label="Previous item" onClick={(event) => { event.stopPropagation(); setLightboxIndex(adjacentIndexes.previous) }} className="absolute left-3 top-1/2 z-10 flex size-12 -translate-y-1/2 items-center justify-center text-white transition-opacity hover:opacity-60 md:left-8"><ChevronLeft size={32} /></button>}
           <div className="relative flex max-h-[90vh] w-full max-w-5xl items-center justify-center" onClick={(event) => event.stopPropagation()}>
             {lightboxItem.isVideo ? (
-              <video ref={lightboxVideoRef} src={lightboxItem.src} poster={firstPhoto?.src} className="max-h-[85vh] w-full object-contain" controls autoPlay playsInline preload="metadata" />
+              <video ref={lightboxVideoRef} src={lightboxItem.src} poster={firstPhoto?.src} className="max-h-[85vh] w-full object-contain" controls autoPlay playsInline preload="none" />
             ) : (
               <img src={lightboxItem.src} alt={lightboxItem.title} width={lightboxItem.width} height={lightboxItem.height} loading="lazy" className="max-h-[85vh] w-full object-contain" />
             )}
